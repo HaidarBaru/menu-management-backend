@@ -1,0 +1,21 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Menu {
+  id       String   @id @default(uuid())
+  name     String
+  parentId String?  // Null jika root item
+  parent   Menu?    @relation("ParentChild", fields: [parentId], references: [id])
+  children Menu[]   @relation("ParentChild")
+  depth    Int      // Menyimpan level kedalaman menu
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
